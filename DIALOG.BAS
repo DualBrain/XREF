@@ -2,51 +2,133 @@
 '$SubTitle:'Dialog Box Input Routines'
 'Copyright (c) 1989 Crescent Software
 'Written by Don Malin
-
+'Made available as **public domain** by Gene Buckle, October 27th, 2018
+'Converted to QB64 by Cory Smith
 
 DEFINT A-Z
 
 '$INCLUDE: 'DialType.BI'
 
-DECLARE FUNCTION AltKey% ()
-DECLARE FUNCTION ASCII% (Char$)
-DECLARE FUNCTION DosError% ()
-DECLARE FUNCTION DOSVer% ()
-DECLARE FUNCTION FindLast% (BYVAL Address, Size)
-DECLARE FUNCTION FudgeFactor& ()
-DECLARE FUNCTION MaxInt% (Num1, Num2)
-DECLARE FUNCTION MGetKey% (Row, Col)
-DECLARE FUNCTION MinInt% (Num1, Num2)
-DECLARE FUNCTION Monitor% ()
-DECLARE FUNCTION Peek1% (Segment%, Address%)
-DECLARE FUNCTION PeekBuf% ()
-DECLARE FUNCTION QPValI% (X$)
-DECLARE FUNCTION WhichError% ()
+'DECLARE FUNCTION AltKey% ()
+'DECLARE FUNCTION ASCII% (Char$)
+'DECLARE FUNCTION DosError% ()
+'DECLARE FUNCTION DOSVer% ()
+'DECLARE FUNCTION FindLast% (BYVAL Address, Size)
+'DECLARE FUNCTION FudgeFactor& ()
+'DECLARE FUNCTION MaxInt% (Num1, Num2)
+'DECLARE FUNCTION MGetKey% (Row, Col)
+'DECLARE FUNCTION MinInt% (Num1, Num2)
+'DECLARE FUNCTION Monitor% ()
+'DECLARE FUNCTION Peek1% (Segment%, Address%)
+'DECLARE FUNCTION PeekBuf% ()
+'DECLARE FUNCTION QPValI% (X$)
+'DECLARE FUNCTION WhichError% ()
 
-DECLARE SUB ButtonPress (Button, Status, Count, X, Y)
-DECLARE SUB Box0 (Top, Lc, Bot, Rc, LType, Clr)
-DECLARE SUB ClearScr0 (UlRow, UlCol, LrRow, LrCol, Colr)
-DECLARE SUB ConcaveFrame (UlR%, UlC%, BrR%, BrC%)
-DECLARE SUB ConvexFrame (UlR%, UlC%, BrR%, BrC%)
-DECLARE SUB EditLine (Edit$, Bg%, En%, Code%, SCode%, MRow%, CurCol%)
-DECLARE SUB ErrMsg (Text$)
-DECLARE SUB Explode (UlR%, UlC%, BrR%, BrC%)
-DECLARE SUB GetCursor (X, Y, Button)
-DECLARE SUB GetVMode (Mode, Page, PageSize, Rows, Columns)
-DECLARE SUB HideCursor ()
-DECLARE SUB ListBox (A$(), Start%, Rows%, Cols%, Action%, SCode%, Row%, Col%, Choice%)
-DECLARE SUB MAmenu (BYVAL Address, Selection, Start, Count, ExitCode, FileColr, HiLiteColr, Rows, Columns, Spacing, Row, Column)
-DECLARE SUB MEditor (Edit$, Length, ScanCode, NumOnly, CapsOn, NormColor, EditColor, Row, Column, CurCol)
-DECLARE SUB MPaintBox (UlRow, UlCol, LrRow, LrCol, Colr)
-DECLARE SUB MQPrint (X$, Colr)
-DECLARE SUB MScrnSave (UlRow, UlCol, LrRow, LrCol, SEG Element)
-DECLARE SUB MScrnRest (UlRow, UlCol, LrRow, LrCol, SEG Element)
-DECLARE SUB Pause3 (MillaSec, Fudg&)
-DECLARE SUB QPrintRC (X$, Row%, Col%, Clr%)
-DECLARE SUB SetError (ErrNum%)
-DECLARE SUB ShowCursor ()
+'DECLARE SUB ButtonPress (Button, Status, Count, X, Y)
+'DECLARE SUB Box0 (Top, Lc, Bot, Rc, LType, Clr)
+'DECLARE SUB ClearScr0 (UlRow, UlCol, LrRow, LrCol, Colr)
+'DECLARE SUB ConcaveFrame (UlR%, UlC%, BrR%, BrC%)
+'DECLARE SUB ConvexFrame (UlR%, UlC%, BrR%, BrC%)
+'DECLARE SUB EditLine (Edit$, Bg%, En%, Code%, SCode%, MRow%, CurCol%)
+'DECLARE SUB ErrMsg (Text$)
+'DECLARE SUB Explode (UlR%, UlC%, BrR%, BrC%)
+'DECLARE SUB GetCursor (X, Y, Button)
+'DECLARE SUB GetVMode (Mode, Page, PageSize, Rows, Columns)
+'DECLARE SUB HideCursor ()
+'DECLARE SUB ListBox (A$(), Start%, Rows%, Cols%, Action%, SCode%, Row%, Col%, Choice%)
+'DECLARE SUB MAmenu (BYVAL Address, Selection, Start, Count, ExitCode, FileColr, HiLiteColr, Rows, Columns, Spacing, Row, Column)
+'DECLARE SUB MEditor (Edit$, Length, ScanCode, NumOnly, CapsOn, NormColor, EditColor, Row, Column, CurCol)
+'DECLARE SUB MPaintBox (UlRow, UlCol, LrRow, LrCol, Colr)
+'DECLARE SUB MQPrint (X$, Colr)
+'DECLARE SUB MScrnSave (UlRow, UlCol, LrRow, LrCol, SEG Element)
+'DECLARE SUB MScrnRest (UlRow, UlCol, LrRow, LrCol, SEG Element)
+'DECLARE SUB Pause3 (MillaSec, Fudg&)
+'DECLARE SUB QPrintRC (X$, Row%, Col%, Clr%)
+'DECLARE SUB SetError (ErrNum%)
+'DECLARE SUB ShowCursor ()
 
 DIM SHARED X$, Fudge&
+
+QPrintRC "TEST", 3, 40, OneColor(1, 2)
+
+'COLOR 7, 0
+LOCATE 1, 1
+PRINT "Hello..."
+
+Colr% = OneColor(1, 2)
+SplitColor Colr%, FG%, BG%
+
+PRINT Colr%
+PRINT FG%
+PRINT BG%
+PRINT _HEIGHT
+
+FOR r = 6 TO 23
+  QPrintRC "0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF", r, 1, colr
+NEXT
+
+'MPaintBox 10, 10, 20, 20, OneColor(0, 7)
+'ConcaveFrame 10, 10, 20, 20
+
+'MPaintBox 10, 30, 20, 40, OneColor(0, 7)
+'ConvexFrame 10, 30, 20, 40
+
+REDIM Dial(5) AS Dialog
+REDIM PA$(5, 1)
+REDIM Mult$(0)
+
+Dial(1).DRow = 2
+Dial(1).DCol = 2
+Dial(1).DTyp = 3 ' Check Box
+PA$(1, 0) = "Extract quoted strings. "
+IF Flag AND 1 THEN
+   PA$(1, 1) = CHR$(251)
+ELSE
+   PA$(1, 1) = " "
+END IF
+
+Dial(2).DRow = 3
+Dial(2).DCol = 2
+Dial(2).DTyp = 3 ' Check Box
+PA$(2, 0) = "Extract REMarks."
+IF -1 THEN 'Flag AND 2 THEN
+   PA$(2, 1) = CHR$(251)
+ELSE
+   PA$(2, 1) = " "
+END IF
+
+Dial(3).DRow = 4
+Dial(3).DCol = 29
+Dial(3).DTyp = 6 ' Message
+
+Dial(4).DRow = 5
+Dial(4).DCol = 5
+Dial(4).DTyp = 5 ' Button
+PA$(4, 0) = "OK"
+
+Dial(5).DRow = 5
+Dial(5).DCol = 16
+Dial(5).DTyp = 5 ' Button
+PA$(5, 0) = "Cancel"
+
+LOCATE 7
+DialogBox "Extract Text", PA$(), Dial(), Mult$(), ExitCode
+
+' do
+'   print altkey%
+' loop
+
+' do
+
+'   exit do
+
+'     GetCursor X%, Y%, Button%
+
+'    IF Button% THEN
+'      PRINT X%, Y%, Button%   
+'    END IF
+
+' loop
 
 SUB ConcaveFrame (UlR, UlC, BrR, BrC) STATIC
 
@@ -58,44 +140,51 @@ SUB ConcaveFrame (UlR, UlC, BrR, BrC) STATIC
    C = UlC
    Clr = 120
 
-   Txt$ = "…"
+   ' Upper Left
+   Txt$ = CHR$(201) '"‚ïî"
    GOSUB ShowIt1
 
+   ' Upper
    C = UlC + 1
-   Txt$ = STRING$(Length, "Õ")
+   Txt$ = STRING$(Length, CHR$(205)) '"‚ïê"
    GOSUB ShowIt1
 
+   ' Upper Right
    C = BrC
    Clr = 127
-   Txt$ = "∏"
+   Txt$ = CHR$(184) '"‚ïï"
    GOSUB ShowIt1
 
    FOR N = UlR + 1 TO BrR - 1
+      ' Left
       R = N
       C = UlC
       Clr = 120
-      Txt$ = "∫"
+      Txt$ = CHR$(186) '"‚ïë"
       GOSUB ShowIt1
-
+      ' Right
       C = BrC
       Clr = 127
-      Txt$ = "≥"
+      Txt$ = CHR$(179) '"‚îÇ"
       GOSUB ShowIt1
    NEXT
 
+   ' Lower Left
    R = BrR
    C = UlC
    Clr = 120
-   Txt$ = "”"
+   Txt$ = CHR$(211) '"‚ïô"
    GOSUB ShowIt1
 
+   ' Lower
    C = UlC + 1
    Clr = 127
-   Txt$ = STRING$(Length, "ƒ")
+   Txt$ = STRING$(Length, CHR$(196)) '"‚îÄ"
    GOSUB ShowIt1
 
+   ' Lower Right
    C = BrC
-   Txt$ = "Ÿ"
+   Txt$ = CHR$(217) '"‚îò"
    GOSUB ShowIt1
 
    ShowCursor
@@ -104,54 +193,62 @@ SUB ConcaveFrame (UlR, UlC, BrR, BrC) STATIC
 
 ShowIt1:
    QPrintRC Txt$, R, C, Clr
-RETURN
+   RETURN
 
 END SUB
 
 SUB ConvexFrame (UlR, UlC, BrR, BrC)
 
    HideCursor
-   Length = BrC - UlC - 1
-   Block$ = "€"
 
+   Length = BrC - UlC - 1
+   Block$ = CHR$(219) '"‚ñà"
+
+   ' Upper Left
    R = UlR
    C = UlC
    Clr = 127
    Txt$ = Block$
    GOSUB ShowIt2
 
+   ' Upper
    C = C + 1
-   Txt$ = STRING$(Length, "ﬂ")
+   Txt$ = STRING$(Length, CHR$(223)) '"‚ñÄ"
    GOSUB ShowIt2
 
+   ' Upper Right
    C = BrC
    Clr = 120
-   Txt$ = "‹"
+   Txt$ = CHR$(220) '"‚ñÑ"
    GOSUB ShowIt2
 
    Txt$ = Block$
    FOR N = UlR + 1 TO BrR - 1
+      ' Left
       R = N
       C = UlC
       Clr = 15
       GOSUB ShowIt2
-
+      ' Right
       C = BrC
       Clr = 8
       GOSUB ShowIt2
    NEXT
 
+   ' Lower Left
    R = BrR
    C = UlC
    Clr = 127
-   Txt$ = "ﬂ"
+   Txt$ = CHR$(223) '"‚ñÄ"
    GOSUB ShowIt2
 
+   ' Lower Right
    C = C + 1
    Clr = 120
-   Txt$ = STRING$(Length, "‹")
+   Txt$ = STRING$(Length, CHR$(220)) '"‚ñÑ"
    GOSUB ShowIt2
 
+   ' Lower
    C = BrC
    Txt$ = Block$
    GOSUB ShowIt2
@@ -162,7 +259,7 @@ SUB ConvexFrame (UlR, UlC, BrR, BrC)
 
 ShowIt2:
    QPrintRC Txt$, R, C, Clr
-RETURN
+   RETURN
 
 END SUB
 
@@ -188,8 +285,7 @@ SUB DialogBox (Title$, PrmtAns$(), Dl() AS Dialog, Mult$(), ExitCode) STATIC
     AltChars$ = "1234567890     QWERTYUIOP    ASDFGHJKL     ZXCVBNM"
     HotKeys$ = ""
 
-    '----- Determine the size of the dialog box based on the longest line and
-    '      lowest row.
+    '----- Determine the size of the dialog box based on the longest line and lowest row.
     FOR N = 1 TO UBOUND(Dl)                     'Examine each input variable
 
         SELECT CASE Dl(N).DTyp                  'Calculate according to Type
@@ -207,6 +303,11 @@ SUB DialogBox (Title$, PrmtAns$(), Dl() AS Dialog, Mult$(), ExitCode) STATIC
            CASE 3
               Dl(N).DLen = 1
               MaxRow = MaxInt(MaxRow, Dl(N).DRow)
+
+              Value1 = Dl(N).DCol
+              Value2$ = PrmtAns$(N, 0)
+              Value3 = Dl(N).DLen
+
               MaxCol = MaxInt(MaxCol, Dl(N).DCol + LEN(PrmtAns$(N, 0)) + 1 + Dl(N).DLen + 2)
 
            '----- Multiple Choice
@@ -262,7 +363,7 @@ SUB DialogBox (Title$, PrmtAns$(), Dl() AS Dialog, Mult$(), ExitCode) STATIC
        OverLay = 0
        '----- Save the underlying screen
        REDIM ScrBuf((BoxBot - BoxTop + 2) * (BoxRC - BoxLC + 3))
-       MScrnSave BoxTop, BoxLC, BoxBot + 1, BoxRC + 2, ScrBuf(0)
+       MScrnSave BoxTop, BoxLC, BoxBot + 1, BoxRC + 2, ScrBuf() ' REM(0)
 
        Explode BoxTop, BoxLC, BoxBot, BoxRC
     END IF
@@ -273,7 +374,7 @@ SUB DialogBox (Title$, PrmtAns$(), Dl() AS Dialog, Mult$(), ExitCode) STATIC
        MQPrint " " + Title$ + " ", BoxClr
     END IF
     LOCATE BoxBot - 2, BoxLC + 1
-    'MQPrint "√" + STRING$(MaxCol, 196) + "¥", BoxClr
+    'MQPrint "‚îú" + STRING$(MaxCol, 196) + "‚î§", BoxClr
     MQPrint STRING$(MaxCol, 196), BoxClr
     MPaintBox BoxTop + 1, BoxRC + 1, BoxBot, BoxRC + 2, 8
     MPaintBox BoxBot + 1, BoxLC + 2, BoxBot + 1, BoxRC + 2, 8
@@ -327,7 +428,8 @@ SUB DialogBox (Title$, PrmtAns$(), Dl() AS Dialog, Mult$(), ExitCode) STATIC
 
               IF X <> N THEN
                  Bx(X, 2) = Bx(X, 0) + 1
-                 QPrintRC "µ" + PrmtAns$(N, 0) + "∆", BTop, Bx(N, 1) + 2, BoxClr
+                 REM QPrintRC "‚ï°" + PrmtAns$(N, 0) + "‚ïû", BTop, Bx(N, 1) + 2, BoxClr
+                 QPrintRC CH$(181) + PrmtAns$(N, 0) + CHR$(198), BTop, Bx(N, 1) + 2, BoxClr
                  N = X
               ELSE
                  Bx(X, 2) = Bx(X, 0) + 2
@@ -343,12 +445,12 @@ SUB DialogBox (Title$, PrmtAns$(), Dl() AS Dialog, Mult$(), ExitCode) STATIC
               Bx(N, 3) = Bx(N, 1) + 2
               LOCATE Bx(N, 0), Bx(N, 1)
               'MQPrint "[ ]", BoxClr
-              MQPrint "ﬁ", 120
+              MQPrint CHR$(222), 120 '"‚ñê"
               LOCATE , Bx(N, 1) + 1
               MQPrint PrmtAns$(N, 1), BoxClr
               
               LOCATE , Bx(N, 1) + 2
-              MQPrint "›", 127
+              MQPrint CHR$(221), 127 '"‚ñå"
 
               LOCATE , Bx(N, 1) + 4
               MQPrint PrmtAns$(N, 0), BoxClr
@@ -382,12 +484,12 @@ SUB DialogBox (Title$, PrmtAns$(), Dl() AS Dialog, Mult$(), ExitCode) STATIC
               Bx(N, 3) = Bx(N, 1) + LEN(PrmtAns$(N, 0)) + 3
 
               LOCATE Bx(N, 0) + 1, Bx(N, 1)
-              MQPrint "ﬁ ", 127
+              MQPrint CHR$(222) + " ", 127 '"‚ñê"
               'MQPrint "( ", 127
               LOCATE , Bx(N, 1) + 1
               MQPrint " " + PrmtAns$(N, 0) + " ", BoxClr
               LOCATE , Bx(N, 1) + LEN(PrmtAns$(N, 0)) + 2
-              MQPrint " ›", 120
+              MQPrint " " + CHR$(221), 120 '"‚ñå"
               'MQPrint " )", 120
              
               IF DfltBut = 0 THEN
@@ -443,10 +545,10 @@ SUB DialogBox (Title$, PrmtAns$(), Dl() AS Dialog, Mult$(), ExitCode) STATIC
               SCode = MGetKey(MRow, CurCol)
 
               IF SCode = 32 THEN
-                 IF PrmtAns$(N, 1) = "˚" THEN
+                 IF PrmtAns$(N, 1) = CHR$(251) THEN '"‚àö"
                     PrmtAns$(N, 1) = " "
                  ELSE
-                    PrmtAns$(N, 1) = "˚"
+                    PrmtAns$(N, 1) = CHR$(251) '"‚àö"
                  END IF
                  MQPrint CHR$(15), BoxClr
                  Pause3 200 * 16, Fudge&
@@ -466,7 +568,7 @@ SUB DialogBox (Title$, PrmtAns$(), Dl() AS Dialog, Mult$(), ExitCode) STATIC
               ListBox Mult$(), Start, Rows, Cols, 3, SCode, MRow, CurCol, Choice
 
               GOSUB CheckUser
-              IF Choice > 1 AND LEFT$(Mult$(Choice), 1) = "ƒ" THEN
+              IF Choice > 1 AND LEFT$(Mult$(Choice), 1) = "-" THEN
                  SCode = 0
               ELSE
                  PrmtAns$(N, 1) = STR$(Choice)
@@ -525,7 +627,7 @@ SUB DialogBox (Title$, PrmtAns$(), Dl() AS Dialog, Mult$(), ExitCode) STATIC
 
 RestoreScr:
     IF Action = 0 OR Action = 5 THEN
-       MScrnRest BoxTop, BoxLC, BoxBot + 1, BoxRC + 2, ScrBuf(0)
+       MScrnRest BoxTop, BoxLC, BoxBot + 1, BoxRC + 2, ScrBuf() REM (0)
        ERASE ScrBuf, Bx
     END IF
     HotKeys$ = ""
@@ -626,10 +728,10 @@ CheckUser:
                              'IF X = N THEN LOCATE Bx(X, 0) + Bx(X, 4), CurCol
 
                           CASE 3
-                             IF PrmtAns$(X, 1) = "˚" THEN
+                             IF PrmtAns$(X, 1) = CHR$(251) THEN '"‚àö"
                                 PrmtAns$(X, 1) = " "
                              ELSE
-                                PrmtAns$(X, 1) = "˚"
+                                PrmtAns$(X, 1) = CHR$(251) '"‚àö"
                              END IF
                              LOCATE Bx(X, 0), Bx(X, 1) + 1
                              MQPrint CHR$(15), BoxClr
@@ -681,70 +783,69 @@ RETURN
 
 
 ButtonBox:
-
-    MPaintBox Bx(N, 0) + 1, Bx(N, 1) + 1, Bx(N, 0) + 1, Bx(N, 3) - 1, Clr
-RETURN
-
-
+   MPaintBox Bx(N, 0) + 1, Bx(N, 1) + 1, Bx(N, 0) + 1, Bx(N, 3) - 1, Clr
+   RETURN
 
 END SUB
 
 SUB EditLine (Edit$, Bg, En, Code, SCode, Row, CurCol)
 
-    Temp$ = SPACE$(En - Bg + 1)
-    LSET Temp$ = Edit$
+   Temp$ = SPACE$(En - Bg + 1)
+   LSET Temp$ = Edit$
 
-    Row = CSRLIN
-    CurCol = Bg + LEN(Edit$)
+   Row = CSRLIN
+   CurCol = Bg + LEN(Edit$)
 
-    LOCATE Row, Bg
-    MQPrint Temp$, BoxClr
-    MQPrint Edit$, HiLite
-   
-    IF Peek1%(Zero, &H463) = &HB4 THEN
-       LOCATE , CurCol, 1, 12, 15
-    ELSE
-       LOCATE , CurCol, 1, 6, 7
-    END IF
+   LOCATE Row, Bg
+   MQPrint Temp$, BoxClr
+   MQPrint Edit$, HiLite
 
-    DO WHILE AltKey% <> 0 AND PeekBuf <> 0
-       X$ = INKEY$
-    LOOP
+   IF Peek1%(Zero, &H463) = &HB4 THEN
+      LOCATE , CurCol, 1, 12, 15
+   ELSE
+      LOCATE , CurCol, 1, 6, 7
+   END IF
 
-    DO
-        SCode = PeekBuf
-        GetCursor 0, 0, Button
-    LOOP UNTIL SCode OR Button
+   DO WHILE AltKey% <> 0 AND PeekBuf <> 0
+      X$ = INKEY$
+   LOOP
 
-    LOCATE Row, Bg
-    MQPrint Temp$, BoxClr
+   DO
+      SCode = PeekBuf
+      GetCursor 0, 0, Button
+   LOOP UNTIL SCode OR Button
 
-    IF AltKey% THEN
-       X$ = INKEY$
-       EXIT SUB
-    END IF
+   LOCATE Row, Bg
+   MQPrint Temp$, BoxClr
 
-    SELECT CASE SCode
-       CASE 32 TO 254
-          LSET Temp$ = ""
-          LOCATE Row, Bg
-          MQPrint Temp$, BoxClr
-          CurCol = Bg
-       CASE ELSE
-    END SELECT
+   IF AltKey% THEN
+      X$ = INKEY$
+      EXIT SUB
+   END IF
 
-    MEditor Temp$, ALen, SCode, Code, 0, BoxClr, BoxClr, Row, Bg, CurCol
+   SELECT CASE SCode
+      CASE 32 TO 254
+         LSET Temp$ = ""
+         LOCATE Row, Bg
+         MQPrint Temp$, BoxClr
+         CurCol = Bg
+      CASE ELSE
+   END SELECT
 
-    IF SCode >= 1000 THEN
-       CurCol = Bg
-       ButtonPress 1, 0, 0, 0, 0
-    END IF
+   MEditor Temp$, ALen, SCode, Code, 0, BoxClr, BoxClr, Row, Bg, CurCol
 
-    Edit$ = LEFT$(Temp$, ALen)
+   IF SCode >= 1000 THEN
+      CurCol = Bg
+      ButtonPress 1, 0, 0, 0, 0
+   END IF
+
+   Edit$ = LEFT$(Temp$, ALen)
 
 END SUB
 
 SUB Explode (UlR, UlC, BrR, BrC)
+
+    MSecMult% = 2 ' Originally 16.
 
     IF Monitor% <> 3 THEN
        IF Fudge& = 0 THEN Fudge& = FudgeFactor& \ 16
@@ -757,7 +858,7 @@ SUB Explode (UlR, UlC, BrR, BrC)
        FOR N = 2 TO MC STEP 2
            LN = MaxInt((ML * N) \ MC, 1)
            ClearScr0 UlR + ML - LN, 40 - N, BrR - ML + LN, 40 + N, BoxClr
-           Pause3 MSec * 16, Fudge&
+           Pause3 MSec * MSecMult%, Fudge&
        NEXT
     END IF
 
@@ -767,14 +868,15 @@ SUB Explode (UlR, UlC, BrR, BrC)
 
 END SUB
 
-SUB ListBox (A$(), Start, Rows, Cols, Action, SCode, Row, Col, Choice)
+SUB ListBox (A$(), Start%, Rows%, Cols%, Action%, SCode%, Row%, Col%, Choice%)
 
     'IF Choice = 0 THEN Choice = 1
     SCode = 0
 
     '----- Get max. width
     ColWd = LEN(A$(1)) + 1
-    LastCh = FindLast(VARPTR(A$(UBOUND(A$))), UBOUND(A$))
+    REM LastCh = FindLast(VARPTR(A$(UBOUND(A$))), UBOUND(A$))
+    LastCh = FindLast(A$(), UBOUND(A$))
     GOSUB InRange
 
     UlRow = CSRLIN
@@ -809,14 +911,12 @@ SUB ListBox (A$(), Start, Rows, Cols, Action, SCode, Row, Col, Choice)
 
     END IF
 
-
-
-
     DO
+
        Row = UlRow + 1
        Col = UlCol + 2
 
-       MAmenu VARPTR(A$(1)), Choice, Start, LastCh, SCode, BoxClr, HiLite, Rows, Cols, 1, Row, Col
+       MAmenu A$(), Choice, Start, LastCh, SCode, BoxClr, HiLite, Rows, Cols, 1, Row, Col
 
        IF SCode = 32 THEN SCode = 13
        IF AltKey% THEN EXIT SUB
@@ -898,3 +998,4 @@ RETURN
 
 END SUB
 
+'$INCLUDE: 'QPPRO.BAS'

@@ -19,11 +19,11 @@
 '****************************************************************************
 DEFINT A-Z
 
-DECLARE FUNCTION ChangeExtension$ (FileName$, Extension$)
-DECLARE FUNCTION BufIn$ (FileName$, Done%)
-DECLARE FUNCTION PDQExist% (FileName$)
-DECLARE SUB BigSave ALIAS "B$PUT3" (BYVAL Handle, BYVAL Segment, BYVAL Address, BYVAL NumBytes)
-DECLARE SUB PDQInput (Work$)
+'DECLARE FUNCTION ChangeExtension$ (FileName$, Extension$)
+'DECLARE FUNCTION BufIn$ (FileName$, Done%)
+'DECLARE FUNCTION PDQExist% (FileName$)
+'DECLARE SUB BigSave ALIAS "B$PUT3" (BYVAL Handle, BYVAL Segment, BYVAL Address, BYVAL NumBytes)
+'DECLARE SUB PDQInput (Work$)
 
 '$INCLUDE: 'XRefCnst.bi'
 '$INCLUDE: 'XRefType.bi'
@@ -112,7 +112,7 @@ OPEN FileName$ FOR BINARY AS #3                 'Open it again for index
 Record = 1                                      'Object database rec. pointer
 
 '~~~~~ See how much memory we have to buffer lines of source.
-MaxEls = FRE(-1) \ (BufWidth + 2&) - 1          'How many buffer lines.
+MaxEls = FRE_STUB(-1) \ (BufWidth + 2&) - 1          'How many buffer lines.
 MaxSize& = MaxEls * CLNG(BufWidth)              'How much memory.
 
 
@@ -215,8 +215,13 @@ FOR Module = 1 TO NumModules                    'Read each module
       OPEN Module$(Module) FOR BINARY AS #2     'Open the original file name.
 
       FOR N = 1 TO BPtr                         'Write each buffered line
-         BigSave 2, VARSEG(B(N).Buffer), VARPTR(B(N).Buffer), B(N).Length
-         
+
+         REM BigSave 2, VARSEG(B(N).Buffer), VARPTR(B(N).Buffer), B(N).Length
+         FOR BINDEX = 1 TO B(N).LENGTH
+           BVALUE$ = MID$(B(N).Buffer, BINDEX, 1)
+           PUT #2, , BVALUE$
+         NEXT
+
          IF ERR THEN
             CLOSE #2
             PRINT "Error writing new file `"; Module$(Module); "'.  Program terminated."
@@ -252,3 +257,14 @@ FUNCTION ChangeExtension$ (FileName$, Extension$) STATIC
 
 END FUNCTION
 
+FUNCTION FRE_STUB%(Number%)
+  FRE_STUB% = 370300
+END FUNCTION
+
+SUB PDQInput(Work$)
+  INPUT Work$
+END SUB
+
+FUNCTION PDQExist%(FileName$)
+  PDQExist% = _FileExists(FileName$)
+END FUNCTION
