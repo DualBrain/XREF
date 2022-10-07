@@ -559,7 +559,7 @@ END FUNCTION
 FUNCTION QPHex$(Value, NumDigits%)
 END FUNCTION
 
-FUNCTION Rand!(Lower!, Upper!)
+FUNCTION Rand!(ValLower!, ValUpper!)
 END FUNCTION
 
 FUNCTION ShrinkTab$(Original$, NumSpaces%)
@@ -1229,9 +1229,222 @@ FUNCTION ASCII% (Char$)
   ASCII% = ASC(Char$)
 END SUB
 
+FUNCTION Blanks%(Work$)
+END FUNCTION
+
+FUNCTION Compact$(Old$)
+END FUNCTION
+
+SUB Encrypt(X$, PassWord$)
+END SUB
+
+SUB Encrypt2(X$, PassWord$)
+END SUB
+
+FUNCTION Far2Str$(Segment%, Address%)
+END FUNCTION
+
+FUNCTION FUsing$(Number$, Image$)
+END FUNCTION
+
+FUNCTION InCount%(Source$, SearchValue$)
+END FUNCTION
+
+FUNCTION InCount2%(Source$, SearchValue$)
+END FUNCTION
+
+FUNCTION InCountTbl%(Source$, Table$)
+END FUNCTION
+
+FUNCTION InstrTbl%(Start%, Source$, Table$)
+END FUNCTION
+
+FUNCTION InstrTbl2%(Start%, Source$, Table$)
+END FUNCTION
+
+FUNCTION InstrTblB%(Start%, Source$, Table$)
+END FUNCTION
+
+FUNCTION InstrTblB2%(Start%, Source$, Table$)
+END FUNCTION
+
+FUNCTION LongestStr%(Array$())
+END FUNCTION
+
+SUB LowASCII(X$)
+END SUB
+
+SUB Lower(value$)
+  value$ = LCASE$(value$)
+END SUB
+
+SUB LowerTbl(Work$, Table$)
+END SUB
+
+FUNCTION MidChar%(Work$, Position%)
+END SUB
+
+SUB MidCharS(Work$, Postion%, Char%)
+END SUB
+
+FUNCTION NotInstr%(Start%, Searched$, Table$)
+END FUNCTION
+
+FUNCTION Null%(Work$)
+END FUNCTION
+
+FUNCTION ParseString$(CurPos%, Work$, DelimitValue$)
+END FUNCTION
+
+SUB ProperName(Work$)
+END SUB
+
+' QInstr serves the same purpose as BASIC's INSTR function, 
+' except it accepts any number of "?" wild cards.
+FUNCTION QInstr%(startPosition%, sourceValue$, searchValue$)
+  IF startPosition% = 0 THEN QInstr% = 0: EXIT FUNCTION
+  QInstr% = INSTR(startPosition%, sourceValue$, searchValue$)
+END FUNCTION
+
+' QInstr2 serves the same purpose as BASIC's INSTR function, except 
+' it accepts any number of "?" wild cards and it ignores capitalization 
+' when examining the strings.
+FUNCTION QInstr2%(startPosition%, sourceValue$, searchValue$)
+  IF startPosition% = 0 THEN QInstr2% = 0: EXIT FUNCTION
+  sourceLowered$ = sourceValue$: Lower(sourceLowered$)
+  searchLowered$ = searchValue$: Lower(searchLowered$)
+  QInstr2% = INSTR(startPosition%, sourceLowered$, searchLowered$)
+END FUNCTION
+
+FUNCTION QInstrB%(StartPos%, Source$, SearchValue$)
+END FUNCTION
+
+FUNCTION QInstrB2%(StartPos%, Source$, SearchValue$)
+END FUNCTION
+
+SUB QInstrH(Segment%, Address%, SearchValue$, NumBytes&)
+END SUB
+
+FUNCTION QPLeft$(Work$, NumChars%)
+END FUNCTION
+
+FUNCTION QPMid$(Work$, StartChar%, NumChars%)
+END FUNCTION
+
+FUNCTION QPRight$(Work$, NumChars%)
+END FUNCTION
+
+FUNCTION QPLen%(Work$)
+END FUNCTION
+
+FUNCTION QPSadd%(Work$)
+END FUNCTION
+
+FUNCTION QPStrI$(IntVar%)
+END FUNCTION
+
+FUNCTION QPStrL$(LongInt&)
+END FUNCTION
+
+FUNCTION QPTrim$(Work$)
+END FUNCTION
+
+FUNCTION QPLTrim$(Work$)
+END FUNCTION
+
+FUNCTION QPRTrim$(Work$)
+END FUNCTION
+
 FUNCTION QPValI% (X$)
   QPValI% = VAL(X$)
 END FUNCTION
+
+FUNCTION QPValL&(Work$)
+END FUNCTION
+
+SUB RemCtrl(X$, Replace$)
+END SUB
+
+' ReplaceChar replaces all occurrences of a specified character in a 
+' string with a different character.
+SUB ReplaceChar(sourceValue$, oldValue$, newValue$)
+  oldChar$ = LEFT$(oldValue$, 1)
+  newChar$ = LEFT$(newValue$, 1)
+  ReplaceString sourceValue$, oldChar$, newChar$
+END SUB
+
+' ReplaceChar2 replaces all occurrences of a specified character in a 
+' string with a different character while ignoring capitalization. 
+SUB ReplaceChar2(sourceValue$, oldValue$, newValue$)
+  oldChar$ = LEFT$(oldValue$, 1)
+  newChar$ = LEFT$(newValue$, 1)
+  ReplaceString2 sourceValue$, oldChar$, newChar$
+END SUB
+
+' SUB ReplaceCharT(typeVar as Any, typeLength%, oldChar%, newChar%)
+' END SUB
+
+' SUB ReplaceCharT2(typeVar as Any, typeLength%, oldChar%, newChar%)
+' END SUB
+
+' ReplaceString replaces all occurrences of a specified string with a 
+' different string (case-sensitive). Both the string being searched 
+' for and its replacement may be any length.
+SUB ReplaceString (sourceValue$, oldValue$, newValue$) STATIC
+
+    oldLen = LEN(oldValue$)
+    newLen = LEN(newValue$)
+    pointer = 1
+
+Again:
+    pointer = QInstr%(pointer, sourceValue$, oldValue$)' case-sensitive
+
+    IF pointer THEN
+       sourceValue$ = LEFT$(sourceValue$, pointer - 1) + newValue$ + MID$(sourceValue$, pointer + oldLen)
+       pointer = pointer + newLen
+       GOTO Again
+    END IF
+
+END SUB
+
+' ReplaceString2 replaces all occurrences of a specified string with a 
+' different string (case-insensitive). Both the string being searched 
+' for and its replacement may be any length.
+SUB ReplaceString2 (sourceValue$, oldValue$, newValue$) STATIC
+
+    oldLen = LEN(oldValue$)
+    newLen = LEN(newValue$)
+    pointer = 1
+
+Again:
+    pointer = QInstr2%(pointer, sourceValue$, oldValue$)' case-insensitive
+
+    IF pointer THEN
+       sourceValue$ = LEFT$(sourceValue$, pointer - 1) + newValue$ + MID$(sourceValue$, pointer + oldLen)
+       pointer = pointer + newLen
+       GOTO Again
+    END IF
+
+END SUB
+
+SUB ReplaceTbl(Work$, Table$)
+END SUB
+
+SUB Sequence(Work$)
+END SUB
+
+FUNCTION SpellNumber$(number$)
+END SUB
+
+SUB Translate(X$)
+END SUB
+
+SUB Upper(value$)
+  value$ = UCASE$(value$)
+END SUB
+
+SUB UpperTbl(Work$, Table$)
+END SUB
 
 ' ****************************************
 ' Chapter 9 - Video Routines
