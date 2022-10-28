@@ -1,69 +1,59 @@
-'********* Dialog.Bas
-'$SubTitle:'Dialog Box Input Routines'
-'Copyright (c) 1989 Crescent Software
-'Written by Don Malin
-'Made available as **public domain** by Gene Buckle, October 27th, 2018
-'Converted to QB64 by Cory Smith
+' ********* DIALOG.BAS
+' SubTitle 'Dialog Box Input Routines'
+' Copyright (c) 1989 Crescent Software
+' Written by Don Malin
+' Modifications (c) 2020 Cory Smith
 
 DEFINT A-Z
 
+'$INCLUDE: '../QuickPakPro/QB64/QPPRO.BI'
 '$INCLUDE: 'DialType.BI'
 
-'DECLARE FUNCTION AltKey% ()
-'DECLARE FUNCTION ASCII% (Char$)
-'DECLARE FUNCTION DosError% ()
-'DECLARE FUNCTION DOSVer% ()
-'DECLARE FUNCTION FindLast% (BYVAL Address, Size)
-'DECLARE FUNCTION FudgeFactor& ()
-'DECLARE FUNCTION MaxInt% (Num1, Num2)
-'DECLARE FUNCTION MGetKey% (Row, Col)
-'DECLARE FUNCTION MinInt% (Num1, Num2)
-'DECLARE FUNCTION Monitor% ()
-'DECLARE FUNCTION Peek1% (Segment%, Address%)
-'DECLARE FUNCTION PeekBuf% ()
-'DECLARE FUNCTION QPValI% (X$)
-'DECLARE FUNCTION WhichError% ()
+_FULLSCREEN _SQUAREPIXELS
 
-'DECLARE SUB ButtonPress (Button, Status, Count, X, Y)
-'DECLARE SUB Box0 (Top, Lc, Bot, Rc, LType, Clr)
-'DECLARE SUB ClearScr0 (UlRow, UlCol, LrRow, LrCol, Colr)
-'DECLARE SUB ConcaveFrame (UlR%, UlC%, BrR%, BrC%)
-'DECLARE SUB ConvexFrame (UlR%, UlC%, BrR%, BrC%)
-'DECLARE SUB EditLine (Edit$, Bg%, En%, Code%, SCode%, MRow%, CurCol%)
-'DECLARE SUB ErrMsg (Text$)
-'DECLARE SUB Explode (UlR%, UlC%, BrR%, BrC%)
-'DECLARE SUB GetCursor (X, Y, Button)
-'DECLARE SUB GetVMode (Mode, Page, PageSize, Rows, Columns)
-'DECLARE SUB HideCursor ()
-'DECLARE SUB ListBox (A$(), Start%, Rows%, Cols%, Action%, SCode%, Row%, Col%, Choice%)
-'DECLARE SUB MAmenu (BYVAL Address, Selection, Start, Count, ExitCode, FileColr, HiLiteColr, Rows, Columns, Spacing, Row, Column)
-'DECLARE SUB MEditor (Edit$, Length, ScanCode, NumOnly, CapsOn, NormColor, EditColor, Row, Column, CurCol)
-'DECLARE SUB MPaintBox (UlRow, UlCol, LrRow, LrCol, Colr)
-'DECLARE SUB MQPrint (X$, Colr)
-'DECLARE SUB MScrnSave (UlRow, UlCol, LrRow, LrCol, SEG Element)
-'DECLARE SUB MScrnRest (UlRow, UlCol, LrRow, LrCol, SEG Element)
-'DECLARE SUB Pause3 (MillaSec, Fudg&)
-'DECLARE SUB QPrintRC (X$, Row%, Col%, Clr%)
-'DECLARE SUB SetError (ErrNum%)
-'DECLARE SUB ShowCursor ()
+DECLARE FUNCTION AltKey% ()
+DECLARE FUNCTION ASCII% (Char$)
+DECLARE FUNCTION DosError% ()
+DECLARE FUNCTION DOSVer% ()
+DECLARE FUNCTION FindLast% (BYVAL Address, Size)
+DECLARE FUNCTION FudgeFactor& ()
+DECLARE FUNCTION MaxInt% (Num1, Num2)
+DECLARE FUNCTION MGetKey% (Row, Col)
+DECLARE FUNCTION MinInt% (Num1, Num2)
+DECLARE FUNCTION Monitor% ()
+DECLARE FUNCTION Peek1% (Segment%, Address%)
+DECLARE FUNCTION PeekBuf% ()
+DECLARE FUNCTION QPValI% (X$)
+DECLARE FUNCTION WhichError% ()
+
+DECLARE SUB ButtonPress (Button, Status, Count, X, Y)
+DECLARE SUB Box0 (Top, Lc, Bot, Rc, LType, Clr)
+DECLARE SUB ClearScr0 (UlRow, UlCol, LrRow, LrCol, Colr)
+DECLARE SUB ConcaveFrame (UlR%, UlC%, BrR%, BrC%)
+DECLARE SUB ConvexFrame (UlR%, UlC%, BrR%, BrC%)
+DECLARE SUB EditLine (Edit$, Bg%, En%, Code%, SCode%, MRow%, CurCol%)
+DECLARE SUB ErrMsg (Text$)
+DECLARE SUB Explode (UlR%, UlC%, BrR%, BrC%)
+DECLARE SUB GetCursor (X, Y, Button)
+DECLARE SUB GetVMode (Mode, Page, PageSize, Rows, Columns)
+DECLARE SUB HideCursor ()
+DECLARE SUB ListBox (A$(), Start%, Rows%, Cols%, Action%, SCode%, Row%, Col%, Choice%)
+DECLARE SUB MAmenu (BYVAL Address, Selection, Start, Count, ExitCode, FileColr, HiLiteColr, Rows, Columns, Spacing, Row, Column)
+DECLARE SUB MEditor (Edit$, Length, ScanCode, NumOnly, CapsOn, NormColor, EditColor, Row, Column, CurCol)
+DECLARE SUB MPaintBox (UlRow, UlCol, LrRow, LrCol, Colr)
+DECLARE SUB MQPrint (X$, Colr)
+DECLARE SUB MScrnSave (UlRow, UlCol, LrRow, LrCol, SEG Element)
+DECLARE SUB MScrnRest (UlRow, UlCol, LrRow, LrCol, SEG Element)
+DECLARE SUB Pause3 (MillaSec, Fudg&)
+DECLARE SUB QPrintRC (X$, Row%, Col%, Clr%)
+DECLARE SUB SetError (ErrNum%)
+DECLARE SUB ShowCursor ()
 
 DIM SHARED X$, Fudge&
 
-QPrintRC "TEST", 3, 40, OneColor(1, 2)
-
-'COLOR 7, 0
-LOCATE 1, 1
-PRINT "Hello..."
-
 Colr% = OneColor(1, 2)
-SplitColor Colr%, FG%, BG%
 
-PRINT Colr%
-PRINT FG%
-PRINT BG%
-PRINT _HEIGHT
-
-FOR r = 6 TO 23
+FOR r = 1 TO 23
   QPrintRC "0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF", r, 1, colr
 NEXT
 
@@ -998,4 +988,4 @@ RETURN
 
 END SUB
 
-'$INCLUDE: 'QPPRO.BAS'
+'$INCLUDE: '..\QuickPakPro\QB64\QPPRO.BAS'

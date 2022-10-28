@@ -362,3 +362,10 @@ out/extension.js.map
 .bak-bm
 .cmp-out
 .json-bak
+
+# Files keeping locally (out of repo).
+*.mak
+*.zip
+*.pdf
+*.exe
+*.com
