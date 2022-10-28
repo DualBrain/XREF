@@ -2,6 +2,7 @@
 '  LINESOUT.BAS - Source for LINESOUT.COM
 '  by Don Malin
 '  (c) 1990, 1991 Crescent Software, Inc.
+'  Modifications (c) 2022 Cory Smith
 '
 '  Purpose:  Removes unused line numbers and labels from a source file that
 '  has been XREFed.  For each module (source file) listed in an Object
@@ -19,11 +20,14 @@
 '****************************************************************************
 DEFINT A-Z
 
-'DECLARE FUNCTION ChangeExtension$ (FileName$, Extension$)
-'DECLARE FUNCTION BufIn$ (FileName$, Done%)
-'DECLARE FUNCTION PDQExist% (FileName$)
-'DECLARE SUB BigSave ALIAS "B$PUT3" (BYVAL Handle, BYVAL Segment, BYVAL Address, BYVAL NumBytes)
-'DECLARE SUB PDQInput (Work$)
+_TITLE "LINESOUT"
+_FULLSCREEN _SQUAREPIXELS
+
+DECLARE FUNCTION ChangeExtension$ (FileName$, Extension$)
+DECLARE FUNCTION BufIn$ (FileName$, Done%)
+DECLARE FUNCTION PDQExist% (FileName$)
+DECLARE SUB BigSave ALIAS "B$PUT3" (BYVAL Handle, BYVAL Segment, BYVAL Address, BYVAL NumBytes)
+DECLARE SUB PDQInput (Work$)
 
 '$INCLUDE: 'XRefCnst.bi'
 '$INCLUDE: 'XRefType.bi'
@@ -42,6 +46,7 @@ CrLf$ = CHR$(13) + CHR$(10)                     'Chariage return line feed
 
 PRINT "Line Number Removal Utility"
 PRINT "(c) 1990, 1991 Crescent Software, Inc."
+PRINT "Modifications (c) 2022 Cory Smith"
 PRINT
 
 

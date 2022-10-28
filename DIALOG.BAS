@@ -1,5 +1,4 @@
 ' ********* DIALOG.BAS
-' SubTitle 'Dialog Box Input Routines'
 ' Copyright (c) 1989 Crescent Software
 ' Written by Don Malin
 ' Modifications (c) 2020 Cory Smith
@@ -9,6 +8,7 @@ DEFINT A-Z
 '$INCLUDE: '../QuickPakPro/QB64/QPPRO.BI'
 '$INCLUDE: 'DialType.BI'
 
+_TITLE "Dialog Box Input Routines"
 _FULLSCREEN _SQUAREPIXELS
 
 DECLARE FUNCTION AltKey% ()
