@@ -44,9 +44,13 @@
 '$Page
 DEFINT A-Z
 
+'$INCLUDE: '../QuickPakPro/QB64/PRO.BI'
 '$INCLUDE: 'XRefCnst.bi'
 '$INCLUDE: 'XRefType.bi'
 '$INCLUDE: 'XRefComn.bi'
+'$INCLUDE: 'QMAP.BI'
+'$INCLUDE: 'XREFMISC.BI'
+'$INCLUDE: 'DialType.Bi'
 
 DECLARE FUNCTION AlertUser% (Message$, Prmt1$, Prmt2$, Prmt3$)
 DECLARE FUNCTION ASCII% (Char$)
@@ -275,7 +279,7 @@ MenuHelp$(2, 3) = "Resumes the cross referencing process from the point you left
 '~~~~~ Save the DOS cursor location and screen for later.
 DosRow = CSRLIN
 DIM DosScr(2000)
-MScrnSave One, One, 25, 80, DosScr(0)
+MScrnSave One, One, 25, 80, DosScr()
 
 
 '~~~~~ Look for a "/B" (Mono colors) in the COMMAND$ line
@@ -839,7 +843,7 @@ DoReport:
       TabCon$(4) = Inf.DateTime
       TabCon$(5) = SPACE$(72) + "Page #"
       IF Inf.GraphChars THEN
-         TabCon$(6) = STRING$(78, "Ä")
+         TabCon$(6) = STRING$(78, "ï¿½")
       ELSE
          TabCon$(6) = STRING$(78, "-")
       END IF
@@ -1261,7 +1265,7 @@ DoBrowse:
       ShowFileName BrowseFileName$
 
       LOCATE 25, 1
-      MQPrint "Use: LEFT, RIGHT, UP, DOWN, PGUP, PGDN, HOME, END to view.          ³          ", 48
+      MQPrint "Use: LEFT, RIGHT, UP, DOWN, PGUP, PGDN, HOME, END to view.          ï¿½          ", 48
 
       DO
 
@@ -1307,6 +1311,16 @@ CloseBrowse:
       BrowseFileName$ = ""
    END IF
 RETURN
+
+'$INCLUDE: '../QuickPakPro/QB64/PULLDNMS.BAS'
+'$INCLUDE: 'QMAP.BAS'
+'$INCLUDE: 'XREFDIAL.BAS'
+'$INCLUDE: 'XREFMISC.BAS'
+'$INCLUDE: 'DIALOG.BAS'
+'$INCLUDE: 'GETFILE.BAS'
+'$INCLUDE: 'FILESORT.BAS'
+'$INCLUDE: 'XREFRPT.BAS'
+'$INCLUDE: '../QuickPakPro/QB64/PRO.BAS'
 
 SUB FatalError
 
@@ -1367,7 +1381,8 @@ SUB FlushPrnBuffer
 
 END SUB
 
-FUNCTION GetNybble% (BYVAL IntArray%, BYVAL Psn%) STATIC
+'FUNCTION GetNybble% (BYVAL IntArray%, BYVAL Psn%) STATIC
+FUNCTION GetNybble% (IntArray%, Psn%) STATIC
 
     SELECT CASE Psn
        CASE 1
@@ -1463,7 +1478,8 @@ SUB InitOutDev (OutDev) STATIC
 
 END SUB
 
-SUB Print2Buffer (Text$, BYVAL CrL) STATIC
+'SUB Print2Buffer (Text$, BYVAL CrL) STATIC
+SUB Print2Buffer (Text$, CrL) STATIC
     SHARED CrLf$
     SHARED PrnBuffer$
 
@@ -1623,7 +1639,7 @@ SUB SetMenuState STATIC
    FOR N = 3 TO 12
       IF MID$(Menu$(N, 1), 1) <> "-" THEN
          IF RptTypes& AND Power2&(N - 2) THEN
-            MID$(Menu$(N, 1), 1) = "û"
+            MID$(Menu$(N, 1), 1) = "ï¿½"
          ELSE
             MID$(Menu$(N, 1), 1) = " "
          END IF
@@ -1638,7 +1654,7 @@ SUB SetMenuState STATIC
   
    '~~~~~ Update check marks on the "Output" menu
    MID$(Menu$(PrevOutDev, 2), 1) = " "
-   MID$(Menu$(OutDev, 2), 1) = "û"
+   MID$(Menu$(OutDev, 2), 1) = "ï¿½"
 
   
    '~~~~~ Disable "Start" choice from the "Run" menu if no file name or
@@ -1676,8 +1692,8 @@ SUB SetMenuState STATIC
 
 END SUB
 
-SUB SetNybble (IntArray, BYVAL Value, BYVAL Psn) STATIC
-
+'SUB SetNybble (IntArray, BYVAL Value, BYVAL Psn) STATIC
+SUB SetNybble (IntArray, Value, Psn) STATIC
     SELECT CASE Psn
        CASE 1
           HiByte = IntArray \ 256
@@ -1710,7 +1726,7 @@ SUB ShowFileName (FileName$) STATIC
 
     IF Dif > 0 THEN
        LOCATE 2, PrevPsn
-       MQPrint STRING$(PrevLen, "Ä"), Inf.ScrClr
+       MQPrint STRING$(PrevLen, "ï¿½"), Inf.ScrClr
     END IF
 
     IF Length > 2 THEN
@@ -1773,4 +1789,3 @@ SUB Wait4DblClick (Ky$)
     END IF
 
 END SUB
-

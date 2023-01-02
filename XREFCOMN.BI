@@ -5,4 +5,3 @@ COMMON Make$(), Incl$()
 COMMON TabCon$()
 COMMON ObjType$()
 COMMON FileName$
-

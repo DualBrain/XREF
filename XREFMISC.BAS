@@ -1,68 +1,68 @@
-'$SubTitle:'Routines for Loading and Saving Object Databases'
+' '$SubTitle:'Routines for Loading and Saving Object Databases'
 
-DEFINT A-Z
+' DEFINT A-Z
 
-'$INCLUDE: 'XRefCnst.bi'
-'$INCLUDE: 'XRefType.bi'
-'$INCLUDE: 'XRefComn.bi'
+' '$INCLUDE: 'XRefCnst.bi'
+' '$INCLUDE: 'XRefType.bi'
+' '$INCLUDE: 'XRefComn.bi'
 
-'$LINESIZE:95
+' '$LINESIZE:95
 
-DECLARE FUNCTION DosError% ()
-DECLARE FUNCTION ErrorMsg$ (ErrorNum)
-DECLARE FUNCTION FileSize& (FileName$)
-DECLARE FUNCTION FLInput$ (Handle, Buffer$)
-DECLARE FUNCTION FLof& (Handle%)
-DECLARE FUNCTION MinInt% (Var1%, Var2%)
-DECLARE FUNCTION ParseString$ (CurPos%, Work$, Delim$)
-DECLARE FUNCTION PDQTimer& ()
-DECLARE FUNCTION QPValI% (Number$)
-DECLARE FUNCTION TranslatePrnSetUp$ (PrnSetUp$)
-DECLARE FUNCTION WhichError% ()
+' DECLARE FUNCTION DosError% ()
+' DECLARE FUNCTION ErrorMsg$ (ErrorNum)
+' DECLARE FUNCTION FileSize& (FileName$)
+' DECLARE FUNCTION FLInput$ (Handle, Buffer$)
+' DECLARE FUNCTION FLof& (Handle%)
+' DECLARE FUNCTION MinInt% (Var1%, Var2%)
+' DECLARE FUNCTION ParseString$ (CurPos%, Work$, Delim$)
+' DECLARE FUNCTION PDQTimer& ()
+' DECLARE FUNCTION QPValI% (Number$)
+' DECLARE FUNCTION TranslatePrnSetUp$ (PrnSetUp$)
+' DECLARE FUNCTION WhichError% ()
 
-DECLARE SUB ButtonPress (Button, Status, Count, X, Y)
-DECLARE SUB Copy2Database (FileName$)
-DECLARE SUB ErrMsg (Text$)
-DECLARE SUB FatalError ()
-DECLARE SUB FClose (Handle%)
-DECLARE SUB FCreate (FileName$)
-DECLARE SUB FGet (Handle%, Dest$)
-DECLARE SUB FGetA (Handle%, SEG Element AS ANY, NumBytes&)
-DECLARE SUB FGetT (Handle%, Dest AS ANY, NumBytes%)
-DECLARE SUB FileSort (DataFile$, IndexFile$, First&, Last&, Table(), RecLength)
-DECLARE SUB FileView (FileName$, Ky%, Action%, VFL AS ANY, SEG Array)
-DECLARE SUB FOpen (FileName$, Handle%)
-DECLARE SUB FPut (Handle%, Source$)
-DECLARE SUB FPutA (Handle%, SEG Element AS ANY, NumBytes&)
-DECLARE SUB FPutT (Handle%, Dest AS ANY, NumBytes%)
-DECLARE SUB FSeek (Handle%, Position&)
-DECLARE SUB GetCursor (X, Y, Button)
-DECLARE SUB HideCursor ()
-DECLARE SUB MQPrint (Text$, Clr)
-DECLARE SUB MScrnSave (ULRow, ULCol, LRRow, LRCol, SEG Element)
-DECLARE SUB MScrnRest (ULRow, ULCol, LRRow, LRCol, SEG Element)
-DECLARE SUB QPrintRC (X$, Row%, Col%, Clr%)
-DECLARE SUB SetError (ErrNum%)
-DECLARE SUB ShowCursor ()
+' DECLARE SUB ButtonPress (Button, Status, Count, X, Y)
+' DECLARE SUB Copy2Database (FileName$)
+' DECLARE SUB ErrMsg (Text$)
+' DECLARE SUB FatalError ()
+' DECLARE SUB FClose (Handle%)
+' DECLARE SUB FCreate (FileName$)
+' DECLARE SUB FGet (Handle%, Dest$)
+' DECLARE SUB FGetA (Handle%, SEG Element AS ANY, NumBytes&)
+' DECLARE SUB FGetT (Handle%, Dest AS ANY, NumBytes%)
+' DECLARE SUB FileSort (DataFile$, IndexFile$, First&, Last&, Table(), RecLength)
+' DECLARE SUB FileView (FileName$, Ky%, Action%, VFL AS ANY, SEG Array)
+' DECLARE SUB FOpen (FileName$, Handle%)
+' DECLARE SUB FPut (Handle%, Source$)
+' DECLARE SUB FPutA (Handle%, SEG Element AS ANY, NumBytes&)
+' DECLARE SUB FPutT (Handle%, Dest AS ANY, NumBytes%)
+' DECLARE SUB FSeek (Handle%, Position&)
+' DECLARE SUB GetCursor (X, Y, Button)
+' DECLARE SUB HideCursor ()
+' DECLARE SUB MQPrint (Text$, Clr)
+' DECLARE SUB MScrnSave (ULRow, ULCol, LRRow, LRCol, SEG Element)
+' DECLARE SUB MScrnRest (ULRow, ULCol, LRRow, LRCol, SEG Element)
+' DECLARE SUB QPrintRC (X$, Row%, Col%, Clr%)
+' DECLARE SUB SetError (ErrNum%)
+' DECLARE SUB ShowCursor ()
 
 
-TYPE FileViewInfo
+' TYPE FileViewInfo
 
-    Colr        AS INTEGER      '7      ;Text color (white on black default)
-    ULRow       AS INTEGER      '1      ;window's corners
-    ULCol       AS INTEGER      '1
-    LRRow       AS INTEGER      '25
-    LRCol       AS INTEGER      '80
-    HorizOffset AS INTEGER      '0      ;Horizontal offset for display (scrolling)
-    LoPtr       AS INTEGER      '0      ;set SI to this for the first screen line
-    FileHandle  AS INTEGER      '0      ;Use for saving file handle
-    EndOfFile   AS INTEGER      '-1     ;Points within buffer
-    LineNumber  AS LONG         '1      ;Line No of the top line
-    BufferMid   AS INTEGER      '16384  ;midpoint of the buffer in bytes
-    FileSeek    AS LONG         '0      ;absolute file LOC to begin display (polled only!)
-    FileOffset  AS LONG         '-1     ;Address within file of buffer data
+'     Colr        AS INTEGER      '7      ;Text color (white on black default)
+'     ULRow       AS INTEGER      '1      ;window's corners
+'     ULCol       AS INTEGER      '1
+'     LRRow       AS INTEGER      '25
+'     LRCol       AS INTEGER      '80
+'     HorizOffset AS INTEGER      '0      ;Horizontal offset for display (scrolling)
+'     LoPtr       AS INTEGER      '0      ;set SI to this for the first screen line
+'     FileHandle  AS INTEGER      '0      ;Use for saving file handle
+'     EndOfFile   AS INTEGER      '-1     ;Points within buffer
+'     LineNumber  AS LONG         '1      ;Line No of the top line
+'     BufferMid   AS INTEGER      '16384  ;midpoint of the buffer in bytes
+'     FileSeek    AS LONG         '0      ;absolute file LOC to begin display (polled only!)
+'     FileOffset  AS LONG         '-1     ;Address within file of buffer data
 
-END TYPE
+' END TYPE
 
 '$Page
 
@@ -76,7 +76,8 @@ SUB AddObjType (Bits&)
 
 END SUB
 
-SUB BrowseFile (FileName$, BYVAL Clr, Ky1, Action) STATIC
+'SUB BrowseFile (FileName$, BYVAL Clr, Ky1, Action) STATIC
+SUB BrowseFile (FileName$, Clr, Ky1, Action) STATIC
 
     IF Action = 1 THEN
 
@@ -86,7 +87,7 @@ SUB BrowseFile (FileName$, BYVAL Clr, Ky1, Action) STATIC
        QPrintRC CHR$(24), 3, Eighty, OneTwelve
        QPrintRC CHR$(8), 4, Eighty, OneTwelve
        FOR N = 5 TO 22
-          QPrintRC "°", N, Eighty, OneTwelve
+          QPrintRC "ï¿½", N, Eighty, OneTwelve
        NEXT
        QPrintRC CHR$(25), 23, Eighty, OneTwelve
     
@@ -202,7 +203,7 @@ SUB BrowseFile (FileName$, BYVAL Clr, Ky1, Action) STATIC
 
     IF BarPos <> PrevBarPos THEN
        HideCursor
-       QPrintRC "°", 4 + PrevBarPos, Eighty, OneTwelve
+       QPrintRC "ï¿½", 4 + PrevBarPos, Eighty, OneTwelve
        QPrintRC CHR$(8), 4 + BarPos, Eighty, OneTwelve
        ShowCursor
        PrevBarPos = BarPos

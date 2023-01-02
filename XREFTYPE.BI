@@ -10,7 +10,6 @@ TYPE ObjectInfo                         'Object information for program
    FirstRef AS LONG
 END TYPE
 
-
 TYPE ReferenceInfo                      'Object reference information
    ObjNo AS INTEGER              '0     'Object number
    Module AS STRING * 1          '2     'Used in Module
@@ -20,5 +19,3 @@ TYPE ReferenceInfo                      'Object reference information
    Assign AS STRING * 1          '8     'Assignment flag
    NextRef AS LONG
 END TYPE
-
-

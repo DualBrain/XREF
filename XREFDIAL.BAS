@@ -1,17 +1,17 @@
-'$SubTitle:'Dialog Box Set Up Routines for XREF'
+' '$SubTitle:'Dialog Box Set Up Routines for XREF'
 
-DEFINT A-Z
+' DEFINT A-Z
 
-'$INCLUDE: 'DialType.Bi'
-'$INCLUDE: 'XrefCnst.bi'
+' '$INCLUDE: 'DialType.Bi'
+' '$INCLUDE: 'XrefCnst.bi'
 
-DECLARE FUNCTION EnterFileName$ (Default$)
-DECLARE FUNCTION FileNameOk (FileName$)
-DECLARE FUNCTION MaxInt% (Var1%, Var2%)
-DECLARE FUNCTION QPValI% (Number$)
-DECLARE FUNCTION Power2& (Power%)
+' DECLARE FUNCTION EnterFileName$ (Default$)
+' DECLARE FUNCTION FileNameOk (FileName$)
+' DECLARE FUNCTION MaxInt% (Var1%, Var2%)
+' DECLARE FUNCTION QPValI% (Number$)
+' DECLARE FUNCTION Power2& (Power%)
 
-DECLARE SUB DialogBox (Title$, PrmtAns$(), Dl() AS Dialog, Mult$(), ExitCode%)
+' DECLARE SUB DialogBox (Title$, PrmtAns$(), Dl() AS Dialog, Mult$(), ExitCode%)
 
 FUNCTION EnterFileName$ (Default$) STATIC
 
@@ -126,7 +126,7 @@ SUB GetRange (LowRange, HiRange, ProcName$, ObjTypes&, ObjType$(), Inf AS GenInf
        Dial(N + 10).DTyp = 3
        PA$(N + 10, 0) = ObjType$(N + Label) + "s"
 
-       IF ObjTypes& AND Power2&(N + Label + 1) THEN PA$(N + 10, 1) = "û"
+       IF ObjTypes& AND Power2&(N + Label + 1) THEN PA$(N + 10, 1) = "ï¿½"
     NEXT
 
     Dial(N + 10).DRow = N + NLn
@@ -153,7 +153,7 @@ SUB GetRange (LowRange, HiRange, ProcName$, ObjTypes&, ObjType$(), Inf AS GenInf
 
        ObjTypes& = 0
        FOR N = 0 TO 8
-          IF PA$(N + 10, 1) = "û" THEN
+          IF PA$(N + 10, 1) = "ï¿½" THEN
              ObjTypes& = ObjTypes& XOR Power2&(N + Label + 1)
           END IF
        NEXT
@@ -173,7 +173,7 @@ SUB SelectObjTypes (ObjTypes&, ObjType$(), NoKeys) STATIC
        Dial(N).DTyp = 3
        PA$(N, 0) = ObjType$(N - 1) + "s"
 
-       IF ObjTypes& AND Power2&(N) THEN PA$(N, 1) = "û"
+       IF ObjTypes& AND Power2&(N) THEN PA$(N, 1) = "ï¿½"
     NEXT
 
     IF NoKeys THEN
@@ -202,7 +202,7 @@ SUB SelectObjTypes (ObjTypes&, ObjType$(), NoKeys) STATIC
     IF ExitCode = 1 THEN
        ObjTypes& = 0
        FOR N = 1 TO 13
-          IF PA$(N, 1) = "û" THEN
+          IF PA$(N, 1) = "ï¿½" THEN
              ObjTypes& = ObjTypes& OR Power2&(N)
           END IF
        NEXT
@@ -341,7 +341,7 @@ SUB SetOptions (Inf AS GenInfo) STATIC
     Dial(2).DRow = 1
     Dial(2).DCol = 38
     Dial(2).DTyp = 3
-    IF Inf.DispText THEN PA$(2, 1) = "û"
+    IF Inf.DispText THEN PA$(2, 1) = "ï¿½"
     
 
     Dial(3).DRow = 2
@@ -352,7 +352,7 @@ SUB SetOptions (Inf AS GenInfo) STATIC
     Dial(4).DRow = 2
     Dial(4).DCol = 38
     Dial(4).DTyp = 3
-    IF Inf.GraphChars THEN PA$(4, 1) = "û"
+    IF Inf.GraphChars THEN PA$(4, 1) = "ï¿½"
 
 
     Dial(5).DRow = 4
@@ -379,7 +379,7 @@ SUB SetOptions (Inf AS GenInfo) STATIC
     Dial(8).DRow = 9
     Dial(8).DCol = 1
     Dial(8).DTyp = 6
-    PA$(8, 0) = "ÄÄÄÄÄÄÄÄÄÄÄÄÄ[ Settings ]ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ"
+    PA$(8, 0) = "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½[ Settings ]ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½"
 
 
     Dial(9).DRow = 11
@@ -420,8 +420,8 @@ SUB SetOptions (Inf AS GenInfo) STATIC
     DialogBox "Options", PA$(), Dial(), Mult$(), ExitCode
 
     IF ExitCode = 1 THEN
-       Inf.DispText = PA$(2, 1) = "û"
-       Inf.GraphChars = PA$(4, 1) = "û"
+       Inf.DispText = PA$(2, 1) = "ï¿½"
+       Inf.GraphChars = PA$(4, 1) = "ï¿½"
        Inf.LineNumbers = QPValI(PA$(7, 1)) - 1
 
        Inf.UBSymbols = QPValI(PA$(9, 1))
@@ -456,7 +456,7 @@ SUB SetUpExtractText (Flag)
     Dial(1).DTyp = 3
     PA$(1, 0) = "Extract quoted strings. "
     IF Flag AND 1 THEN
-       PA$(1, 1) = "û"
+       PA$(1, 1) = "ï¿½"
     ELSE
        PA$(1, 1) = " "
     END IF
@@ -467,7 +467,7 @@ SUB SetUpExtractText (Flag)
     Dial(2).DTyp = 3
     PA$(2, 0) = "Extract REMarks."
     IF Flag AND 2 THEN
-       PA$(2, 1) = "û"
+       PA$(2, 1) = "ï¿½"
     ELSE
        PA$(2, 1) = " "
     END IF
@@ -494,7 +494,7 @@ SUB SetUpExtractText (Flag)
 
     IF ExitCode = 1 THEN
 
-       Flag = 2 * ABS(PA$(2, 1) = "û") + ABS(PA$(1, 1) = "û")
+       Flag = 2 * ABS(PA$(2, 1) = "ï¿½") + ABS(PA$(1, 1) = "ï¿½")
 
     END IF
 
@@ -604,7 +604,7 @@ SUB SetupProcTree (Inf AS GenInfo) STATIC
     Dial(1).DTyp = 3
     PA$(1, 0) = "Use IBM line characters"
     IF Inf.GraphChars THEN
-       PA$(1, 1) = "û"
+       PA$(1, 1) = "ï¿½"
     ELSE
        PA$(1, 1) = " "
     END IF
@@ -634,7 +634,7 @@ SUB SetupProcTree (Inf AS GenInfo) STATIC
     Dial(5).DTyp = 3
     PA$(5, 0) = "Sort Procedures"
     IF Inf.SortProcTree THEN
-       PA$(5, 1) = "û"
+       PA$(5, 1) = "ï¿½"
     ELSE
        PA$(5, 1) = " "
     END IF
@@ -671,7 +671,7 @@ SUB SetupProcTree (Inf AS GenInfo) STATIC
     IF Inf.DetailProcTree MOD 256 THEN
        PA$(11, 1) = " "
     ELSE
-       PA$(11, 1) = "û"
+       PA$(11, 1) = "ï¿½"
     END IF
 
     Dial(12).DRow = 14
@@ -679,7 +679,7 @@ SUB SetupProcTree (Inf AS GenInfo) STATIC
     Dial(12).DTyp = 3
     PA$(12, 0) = "Insert page breaks in report"
     IF Inf.ProcTreePages THEN
-       PA$(12, 1) = "û"
+       PA$(12, 1) = "ï¿½"
     ELSE
        PA$(12, 1) = " "
     END IF
@@ -689,7 +689,7 @@ SUB SetupProcTree (Inf AS GenInfo) STATIC
     Dial(13).DTyp = 3
     PA$(13, 0) = "Exclude EXTERNAL procedure names from tree"
     IF Inf.DetailProcTree \ 256 THEN
-       PA$(13, 1) = "û"
+       PA$(13, 1) = "ï¿½"
     ELSE
        PA$(13, 1) = " "
     END IF
@@ -708,9 +708,9 @@ SUB SetupProcTree (Inf AS GenInfo) STATIC
     DialogBox "Procedure Tree Setup", PA$(), Dial(), Mult$(), ExitCode
 
     IF ExitCode = 1 THEN
-       Inf.SortProcTree = PA$(5, 1) = "û"
-       Inf.DetailProcTree = 256 * (PA$(13, 1) = "û") + (PA$(11, 1) <> "û")
-       Inf.ProcTreePages = PA$(12, 1) = "û"
+       Inf.SortProcTree = PA$(5, 1) = "ï¿½"
+       Inf.DetailProcTree = 256 * (PA$(13, 1) = "ï¿½") + (PA$(11, 1) <> "ï¿½")
+       Inf.ProcTreePages = PA$(12, 1) = "ï¿½"
     END IF
 
     ERASE Dial, PA$, Mult$
@@ -745,7 +745,7 @@ SUB SetUpSourceListing (PageTitle$, Inf AS GenInfo) STATIC
     Dial(3).DTyp = 3
     PA$(3, 0) = "Print Procedures on separate pages"
     IF Inf.ProcPage THEN
-       PA$(3, 1) = "û"
+       PA$(3, 1) = "ï¿½"
     ELSE
        PA$(3, 1) = " "
     END IF
@@ -781,7 +781,7 @@ SUB SetUpSourceListing (PageTitle$, Inf AS GenInfo) STATIC
     IF ExitCode = 1 THEN
        PageTitle$ = PA$(1, 1)
        Inf.ListInclude = QPValI(PA$(2, 1)) - 1
-       Inf.ProcPage = PA$(3, 1) = "û"
+       Inf.ProcPage = PA$(3, 1) = "ï¿½"
        Inf.TabSpaces = QPValI(PA$(4, 1))
     END IF
 

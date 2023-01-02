@@ -1,7 +1,7 @@
 '~~~~~ Define Constants
 CONST True = -1, False = 0
 
-CONST NameLen = 40                      'Maximum length for a procedure name
+CONST NameLen = 40                      ' Maximum length for a procedure name
 
 CONST BASIC = 0
 CONST DefFnProc = 1
@@ -24,9 +24,9 @@ CONST Commn = 1
 CONST Atrb = 2
 CONST DimType = 3
 
-
 '~~~~~ Define TYPEs for procedure Info
 TYPE GenInfo
+
    Formated AS INTEGER
    UBSymbols    AS INTEGER              'Maximum number of objects per module
    UBWords AS INTEGER                   'Maximum number of words per line of
@@ -85,5 +85,5 @@ TYPE GenInfo
    TabConLine AS INTEGER
 
    ErrCode AS INTEGER
-END TYPE
 
+END TYPE
